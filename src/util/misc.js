@@ -502,15 +502,14 @@
         setterName = 'set' + capitalizedPropName;
         getterName = 'get' + capitalizedPropName;
 
-        // using `new Function` for better introspection
         if (!proto[getterName]) {
           proto[getterName] = (function(property) {
-            return new Function('return this.get("' + property + '")');
+            return function () { return this.get(property); };
           })(propName);
         }
         if (!proto[setterName]) {
           proto[setterName] = (function(property) {
-            return new Function('value', 'return this.set("' + property + '", value)');
+            return function (value) { return this.set(property, value); };
           })(propName);
         }
       }
